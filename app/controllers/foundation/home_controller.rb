@@ -3,7 +3,8 @@
 module Foundation
   # Marketing landing page for Beacon. This replaces the template's minimal
   # home with the requested hero, features, pricing tiers, FAQ, and lead
-  # capture.
+  # capture. Pricing tiers are plain data here so the public page never
+  # depends on the billing DSL internals.
   class HomeController < ApplicationController
     PLANS = [
       {
@@ -12,8 +13,8 @@ module Foundation
         description: "For individuals and small experiments.",
         bullets: ["One workspace", "Up to 3 team members", "Community support"],
         highlighted: false,
-        cta_text: "Start free",
-        cta: -> { helpers.new_user_registration_path }
+        cta_label: "Start free",
+        cta_route: -> { new_user_registration_path }
       },
       {
         name: "Pro",
@@ -21,8 +22,8 @@ module Foundation
         description: "For teams shipping a growing product.",
         bullets: ["Unlimited workspaces", "Up to 25 team members", "API access", "Priority support"],
         highlighted: true,
-        cta_text: "Choose Pro",
-        cta: -> { helpers.pricing_path }
+        cta_label: "Choose Pro",
+        cta_route: -> { pricing_path }
       },
       {
         name: "Enterprise",
@@ -30,8 +31,8 @@ module Foundation
         description: "For organizations that need advanced controls.",
         bullets: ["Unlimited team members", "API access", "Single sign-on", "Dedicated support"],
         highlighted: false,
-        cta_text: "Contact sales",
-        cta: -> { "mailto:#{helpers.current_controller? ? nil : Rails.configuration.x.foundation[:support_email]}" }
+        cta_label: "Contact sales",
+        cta_route: -> { "mailto:#{Rails.configuration.x.foundation[:support_email]}" }
       }
     ].freeze
 
