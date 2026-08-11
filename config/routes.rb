@@ -155,5 +155,5 @@ Rails.application.routes.draw do
   end
 
   # Minimal landing page until the M7 marketing set replaces it.
-    root "foundation/home#show"
+  root "foundation/home#show"
 end
