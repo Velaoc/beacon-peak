@@ -10,8 +10,6 @@
 # The first operator account is promoted from the console on purpose; there
 # is deliberately no seeded administrator, password, or API key anywhere in
 # this repository.
-org = Organizations::Organization.find_or_create_by!(name: "Beacon Peak")
-
 leads = [
   { name: "Maya Chen", email: "maya@northwindlabs.io", source: "Landing page signup" },
   { name: "Jonas Weber", email: "jonas@brightloop.co", source: "Landing page signup" },
@@ -19,11 +17,10 @@ leads = [
 ]
 
 leads.each do |attrs|
-  Foundation::Crm::Lead.find_or_create_by!(organization: org, email: attrs[:email]) do |lead|
+  Lead.find_or_create_by!(email: attrs[:email]) do |lead|
     lead.name = attrs[:name]
     lead.source = attrs[:source]
-    lead.status = "new"
   end
 end
 
-puts "Seeded #{Foundation::Crm::Lead.where(organization: org).count} leads for Beacon Peak."
+puts "Seeded #{Lead.count} leads for Beacon Peak."
