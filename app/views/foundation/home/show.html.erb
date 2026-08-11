@@ -82,7 +82,7 @@
     <h2 id="pricing-title" class="md-section__heading">Simple plans that scale with you.</h2>
     <div class="md-pricing-grid">
       <% @plans.each do |plan| %>
-        <article class="md-card md-card--filled md-pricing-card <%= plan.highlighted? ? "md-pricing-card--highlighted" : "" %>">
+        <article class="md-card md-card--filled md-pricing-card <%= plan.name.to_s == "pro" ? "md-pricing-card--highlighted" : "" %>">
           <h3><%= plan.name.to_s.humanize %></h3>
           <p class="md-pricing-card__price">
             <% meta = plan.metadata[:prices] || {} %>
