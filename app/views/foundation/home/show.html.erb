@@ -82,26 +82,19 @@
     <h2 id="pricing-title" class="md-section__heading">Simple plans that scale with you.</h2>
     <div class="md-pricing-grid">
       <% @plans.each do |plan| %>
-        <article class="md-card md-card--filled md-pricing-card <%= plan.name.to_s == "pro" ? "md-pricing-card--highlighted" : "" %>">
-          <h3><%= plan.name.to_s.humanize %></h3>
+        <article class="md-card md-card--filled md-pricing-card <%= plan[:highlighted] ? "md-pricing-card--highlighted" : "" %>">
+          <h3><%= plan[:name] %></h3>
           <p class="md-pricing-card__price">
-            <% meta = plan.metadata[:prices] || {} %>
-            <%= number_to_currency(meta[:month].to_f / 100, precision: 0) %>
+            <%= number_to_currency(plan[:price], precision: 0) %>
             <span>/ month</span>
           </p>
-          <p><%= plan.description %></p>
+          <p><%= plan[:description] %></p>
           <ul class="md-pricing-card__bullets">
-            <% plan.bullets.each do |bullet| %>
+            <% plan[:bullets].each do |bullet| %>
               <li><%= bullet %></li>
             <% end %>
           </ul>
-          <% if plan.cta_url.present? %>
-            <%= link_to plan.cta_text, plan.cta_url, class: "md-button md-button--outlined" %>
-          <% elsif plan.price.zero? %>
-            <%= link_to "Start free", new_user_registration_path, class: "md-button md-button--outlined" %>
-          <% else %>
-            <%= link_to "Choose #{plan.name.to_s.humanize}", pricing_path, class: "md-button md-button--filled" %>
-          <% end %>
+          <%= link_to plan[:cta_label], instance_exec(&plan[:cta_route]), class: "md-button #{plan[:highlighted] ? "md-button--filled" : "md-button--outlined"}" %>
         </article>
       <% end %>
     </div>
