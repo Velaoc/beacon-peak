@@ -3,11 +3,40 @@
 module Foundation
   # Marketing landing page for Beacon. This replaces the template's minimal
   # home with the requested hero, features, pricing tiers, FAQ, and lead
-  # capture. The public pricing section mirrors PricingPlans (the foundation's
-  # single source of truth for tiers) so the page never drifts from billing.
+  # capture.
   class HomeController < ApplicationController
+    PLANS = [
+      {
+        name: "Free",
+        price: 0,
+        description: "For individuals and small experiments.",
+        bullets: ["One workspace", "Up to 3 team members", "Community support"],
+        highlighted: false,
+        cta_text: "Start free",
+        cta: -> { helpers.new_user_registration_path }
+      },
+      {
+        name: "Pro",
+        price: 29,
+        description: "For teams shipping a growing product.",
+        bullets: ["Unlimited workspaces", "Up to 25 team members", "API access", "Priority support"],
+        highlighted: true,
+        cta_text: "Choose Pro",
+        cta: -> { helpers.pricing_path }
+      },
+      {
+        name: "Enterprise",
+        price: 99,
+        description: "For organizations that need advanced controls.",
+        bullets: ["Unlimited team members", "API access", "Single sign-on", "Dedicated support"],
+        highlighted: false,
+        cta_text: "Contact sales",
+        cta: -> { "mailto:#{helpers.current_controller? ? nil : Rails.configuration.x.foundation[:support_email]}" }
+      }
+    ].freeze
+
     def show
-      @plans = PricingPlans.all
+      @plans = PLANS
       @faqs = [
         {
           q: "Do I need to install anything to use Beacon?",
