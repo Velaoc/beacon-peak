@@ -1,21 +1,17 @@
 # frozen_string_literal: true
 
-# Public signup capture for the Beacon Peak landing page. Leads are stored
-# under the "Beacon Peak" organization so operators can work them from the
-# CRM (as members of that organization) or from Admin → Leads.
+# Public signup capture for the Beacon Peak landing page. Stores a Lead for
+# the sales team; the admin area (Madmin) lists and manages these records.
 class LeadsController < ApplicationController
   def create
     name = params.dig(:lead, :name).to_s.strip
     email = params.dig(:lead, :email).to_s.strip.downcase
     name = email.split("@").first.presence || "New lead" if name.blank?
 
-    organization = Organizations::Organization.find_or_create_by!(name: "Beacon Peak")
-    lead = Foundation::Crm::Lead.new(
-      organization: organization,
+    lead = Lead.new(
       name: name,
       email: email.presence,
-      source: "Landing page signup",
-      status: "new"
+      source: "Landing page signup"
     )
 
     if lead.save
